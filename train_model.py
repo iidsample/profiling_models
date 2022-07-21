@@ -85,6 +85,6 @@ def main_trainer(args, bsize):
 
 if __name__ == "__main__":
     args = parse_args(argparse.ArgumentParser(description="Large Scale Verification"))
-    dist.init_process_group(backend="nccl", init_method="env://")
+    dist.init_process_group(backend="NCCL", init_method="env://")
     args.model_name = "resnet50"
     main_trainer(args, 16)
