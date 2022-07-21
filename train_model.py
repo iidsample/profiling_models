@@ -56,6 +56,7 @@ def main_trainer(args, bsize):
     data = torch.randn((bsize, 3, 224, 224))
     target = torch.randint(0, 900, [bsize])
     for batch_idx in range(100):
+        print(batch_idx)
         data, target = data.to(assigned_device), target.to(assigned_device)
         output = model(data)
         loss = criterion(output, target)
@@ -84,5 +85,6 @@ def main_trainer(args, bsize):
 
 if __name__ == "__main__":
     args = parse_args(argparse.ArgumentParser(description="Large Scale Verification"))
+    dist.init_process_group(backend="nccl", init_method="env://")
     args.model_name = "resnet50"
     main_trainer(args, 16)
