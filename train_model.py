@@ -88,3 +88,17 @@ if __name__ == "__main__":
     dist.init_process_group(backend="NCCL", init_method="env://")
     args.model_name = "resnet50"
     main_trainer(args, 16)
+    main_trainer(args, 32)
+    main_trainer(args, 48)
+    args.model_name = "vgg19"
+    main_trainer(args, 16)
+    main_trainer(args, 32)
+    main_trainer(args, 48)
+    args.model_name = "vgg16"
+    main_trainer(args, 16)
+    main_trainer(args, 32)
+    main_trainer(args, 48)
+    args.model_name = "vgg11"
+    main_trainer(args, 16)
+    main_trainer(args, 32)
+    main_trainer(args, 48)
