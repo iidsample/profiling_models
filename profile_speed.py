@@ -13,8 +13,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torch.distributed as dist
 from torchvision import datasets, transforms
-from collections import defaultdict
-
+from collections import defaultdict 
 
 def parse_args(parser):
     # parser.add_argument("--arch", default="resnet50", type=str,
@@ -42,7 +41,7 @@ def test_all_reduce_time(args):
     assigned_device = "cuda:{}".format(args.local_rank)
     torch.cuda.set_device(args.local_rank)
     global_rank = args.node_rank * 4 + args.local_rank
-    tensor_rand = torch.rand(array_size, device=assigned_device)
+    tensor_rand = torch.rand(array_size, device=assigned_device, dtype=torch.float32)
     world_size = dist.get_world_size()
     # accum_list = [torch.zeros_like(tensor_rand) for i in range(world_size)]
     time_list = list()
@@ -59,7 +58,7 @@ def test_all_reduce_time(args):
         print(time_taken)
     data_dict = dict()
     data_dict["timing_log"] = time_list
-    file_name = "k80_single_node_{}_{}.json".format(dist.world_size, arg.local_rank)
+    file_name = "k80_single_node_{}_{}.json".format(world_size, args.local_rank)
     with open(file_name, "w") as fout:
         json.dump(data_dict, fout)
 
