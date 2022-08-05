@@ -59,7 +59,7 @@ def test_all_reduce_time(args):
         print(time_taken)
     data_dict = dict()
     data_dict["timing_log"] = time_list
-    file_name = "k80_two_node_{}_{}.json".format(dist.world_size, arg.local_rank)
+    file_name = "k80_single_node_{}_{}.json".format(dist.world_size, arg.local_rank)
     with open(file_name, "w") as fout:
         json.dump(data_dict, fout)
 
