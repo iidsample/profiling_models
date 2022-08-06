@@ -13,7 +13,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torch.distributed as dist
 from torchvision import datasets, transforms
-from collections import defaultdict 
+from collections import defaultdict
+
 
 def parse_args(parser):
     # parser.add_argument("--arch", default="resnet50", type=str,
@@ -49,6 +50,9 @@ def test_all_reduce_time(args):
     stop_time_backward = torch.cuda.Event(enable_timing=True)
     for i in range(100):
         print(i)
+        tensor_rand = torch.rand(
+            array_size, device=assigned_device, dtype=torch.float32
+        )
         start_time_backward.record()
         dist.all_reduce(tensor_rand)
         stop_time_backward.record()
