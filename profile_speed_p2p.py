@@ -107,4 +107,5 @@ if __name__ == "__main__":
         for j in range(0, 8):
             if i == j:
                 continue
-        test_p2p_time(args, i, j)
+            else:
+                test_p2p_time(args, i, j)
