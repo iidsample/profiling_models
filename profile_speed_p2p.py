@@ -82,8 +82,12 @@ def test_p2p_time(args, src_device, dest_device):
     stop_time_backward = torch.cuda.Event(enable_timing=True)
     for i in range(100):
         print(i)
-        send_tensor = torch.rand(array_size, device=src_device, dtype=torch.float32)
-        recv_tensor = torch.rand(array_size, device=dest_device, dtype=torch.float32)
+        if args.local_rank == 0:
+            send_tensor = torch.rand(array_size, device=src_device, dtype=torch.float32)
+        if args.local_rank == 1:
+            recv_tensor = torch.rand(
+                array_size, device=dest_device, dtype=torch.float32
+            )
         start_time_backward.record()
         if args.local_rank == 0:
             dist.send(send_tensor, dest_device)
