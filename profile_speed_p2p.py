@@ -123,6 +123,6 @@ if __name__ == "__main__":
             if i == j:
                 continue
             else:
-                if args.local_rank == i or args.local_rank == j:
-                    test_p2p_time(args, i, j)
+                # if args.local_rank == i or args.local_rank == j:
+                test_p2p_time(args, i, j)
                 dist.all_reduce(torch.rand(10, device=args.local_rank))
