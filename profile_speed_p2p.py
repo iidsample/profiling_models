@@ -73,6 +73,7 @@ def test_p2p_time(args, src_device, dest_device):
     # torch.cuda.set_device(args.local_rank)
     global_rank = args.node_rank * 4 + args.local_rank
 
+    time_list = list()
     start_time_backward = torch.cuda.Event(enable_timing=True)
     stop_time_backward = torch.cuda.Event(enable_timing=True)
     for i in range(100):
