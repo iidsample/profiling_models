@@ -73,45 +73,43 @@ def test_p2p_time(args, src_device, dest_device):
     array_size = 13107200
     # assigned_device = "cuda:{}".format(args.local_rank)
     # torch.cuda.set_device(args.local_rank)
-    if args.local_rank == src_device or args.local_rank == dest_device:
-        print("Src device {}".format(src_device))
-        print("Dest device {}".format(dest_device))
+    # if args.local_rank == src_device or args.local_rank == dest_device:
+    print("Src device {}".format(src_device))
+    print("Dest device {}".format(dest_device))
+    if args.local_rank == 0:
+        torch.cuda.set_device(src_device)
+    if args.local_rank == 1:
+        torch.cuda.set_device(dest_device)
+    # global_rank = args.node_rank * 4 + args.local_rank
+
+    time_list = list()
+    start_time_backward = torch.cuda.Event(enable_timing=True)
+    stop_time_backward = torch.cuda.Event(enable_timing=True)
+    for i in range(100):
+        print(i)
         if args.local_rank == 0:
-            torch.cuda.set_device(src_device)
+            send_tensor = torch.rand(array_size, device=src_device, dtype=torch.float32)
         if args.local_rank == 1:
-            torch.cuda.set_device(dest_device)
-        # global_rank = args.node_rank * 4 + args.local_rank
-
-        time_list = list()
-        start_time_backward = torch.cuda.Event(enable_timing=True)
-        stop_time_backward = torch.cuda.Event(enable_timing=True)
-        for i in range(100):
-            print(i)
-            if args.local_rank == 0:
-                send_tensor = torch.rand(
-                    array_size, device=src_device, dtype=torch.float32
-                )
-            if args.local_rank == 1:
-                recv_tensor = torch.rand(
-                    array_size, device=dest_device, dtype=torch.float32
-                )
-            start_time_backward.record()
-            if args.local_rank == 0:
-                dist.send(send_tensor, dest_device)
-            if args.local_rank == 1:
-                dist.recv(recv_tensor, src=src_device)
-            stop_time_backward.record()
-            torch.cuda.synchronize()
-            time_taken = start_time_backward.elapsed_time(stop_time_backward)
-            time_list.append(time_taken)
-            data_dict = dict()
-            data_dict["timing_log"] = time_list
-
-            file_name = "k80_single_node_send_{}_recv_{}.json".format(
-                src_device, dest_device
+            recv_tensor = torch.rand(
+                array_size, device=dest_device, dtype=torch.float32
             )
-            with open(file_name, "w") as fout:
-                json.dump(data_dict, fout)
+        start_time_backward.record()
+        if args.local_rank == 0:
+            dist.send(send_tensor, dest_device)
+        if args.local_rank == 1:
+            dist.recv(recv_tensor, src=src_device)
+        stop_time_backward.record()
+        torch.cuda.synchronize()
+        time_taken = start_time_backward.elapsed_time(stop_time_backward)
+        time_list.append(time_taken)
+        data_dict = dict()
+        data_dict["timing_log"] = time_list
+
+        file_name = "k80_single_node_send_{}_recv_{}.json".format(
+            src_device, dest_device
+        )
+        with open(file_name, "w") as fout:
+            json.dump(data_dict, fout)
     # torch.dist.all_reduce(torch.rand(10, device=args.local_rank))
 
 
