@@ -74,9 +74,9 @@ def test_p2p_time(args, src_device, dest_device):
     if args.local_rank == src_device or args.local_rank == dest_device:
         print("Src device {}".format(src_device))
         print("Dest device {}".format(dest_device))
-        if args.local_rank == src_device:
+        if args.local_rank == 0:
             torch.cuda.set_device(src_device)
-        if args.local_rank == dest_device:
+        if args.local_rank == 1:
             torch.cuda.set_device(dest_device)
         # global_rank = args.node_rank * 4 + args.local_rank
 
@@ -85,18 +85,18 @@ def test_p2p_time(args, src_device, dest_device):
         stop_time_backward = torch.cuda.Event(enable_timing=True)
         for i in range(100):
             print(i)
-            if args.local_rank == src_device:
+            if args.local_rank == 0:
                 send_tensor = torch.rand(
                     array_size, device=src_device, dtype=torch.float32
                 )
-            if args.local_rank == dest_device:
+            if args.local_rank == 1:
                 recv_tensor = torch.rand(
                     array_size, device=dest_device, dtype=torch.float32
                 )
             start_time_backward.record()
-            if args.local_rank == src_device:
+            if args.local_rank == 0:
                 dist.send(send_tensor, dest_device)
-            if args.local_rank == dest_device:
+            if args.local_rank == 1:
                 dist.recv(recv_tensor, src=src_device)
             stop_time_backward.record()
             torch.cuda.synchronize()
@@ -115,7 +115,13 @@ def test_p2p_time(args, src_device, dest_device):
 
 if __name__ == "__main__":
     args = parse_args(argparse.ArgumentParser(description="Large Scale Verification"))
-    dist.init_process_group(backend="NCCL", init_method="env://")
+    dist.init_process_group(
+        backend="NCCL",
+        init_method="tcp://172.31.45.37:2345",
+        timeout=60,
+        world_size=2,
+        rank=args.local_rank,
+    )
     print("Dist init")
     args.model_name = "timing_test_all_reduce_single_machine"
     for i in range(0, 8):
@@ -125,4 +131,4 @@ if __name__ == "__main__":
             else:
                 # if args.local_rank == i or args.local_rank == j:
                 test_p2p_time(args, i, j)
-                dist.all_reduce(torch.rand(10, device=args.local_rank))
+                # dist.all_reduce(torch.rand(10, device=args.local_rank))
