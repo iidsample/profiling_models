@@ -94,7 +94,7 @@ def test_p2p_time(args, src_device, dest_device):
         if args.local_rank == 0:
             dist.send(send_tensor, 1)
         if args.local_rank == 1:
-            dist.recv(recv_tensor, src=0)
+            dist.recv(recv_tensor)
         stop_time_backward.record()
         torch.cuda.synchronize()
         time_taken = start_time_backward.elapsed_time(stop_time_backward)
