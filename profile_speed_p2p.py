@@ -110,7 +110,7 @@ def test_p2p_time(args, src_device, dest_device):
             )
             with open(file_name, "w") as fout:
                 json.dump(data_dict, fout)
-    torch.all_reduce(torch.rand(10, device=args.local_rank))
+    # torch.dist.all_reduce(torch.rand(10, device=args.local_rank))
 
 
 if __name__ == "__main__":
@@ -123,4 +123,5 @@ if __name__ == "__main__":
             if i == j:
                 continue
             else:
-                test_p2p_time(args, i, j)
+                if args.local_rank == i or args.local_rank == j:
+                    test_p2p_time(args, i, j)
