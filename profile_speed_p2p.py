@@ -119,7 +119,7 @@ if __name__ == "__main__":
     args = parse_args(argparse.ArgumentParser(description="Large Scale Verification"))
     dist.init_process_group(
         backend="NCCL",
-        init_method="tcp://172.31.45.37:2345",
+        init_method="tcp://172.31.39.224:2345",
         timeout=datetime.timedelta(60),
         world_size=2,
         rank=args.local_rank,
