@@ -71,6 +71,8 @@ def test_p2p_time(args, src_device, dest_device):
     array_size = 13107200
     # assigned_device = "cuda:{}".format(args.local_rank)
     # torch.cuda.set_device(args.local_rank)
+    print("Src device {}".format(src_device))
+    print("Dest device {}".format(dest_device))
     if args.local_rank == 0:
         torch.cuda.set_device(src_device)
     if args.local_rank == 1:
