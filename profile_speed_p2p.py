@@ -69,21 +69,20 @@ def test_all_reduce_time(args):
 
 def test_p2p_time(args, src_device, dest_device):
     array_size = 13107200
-    assigned_device = "cuda:{}".format(args.local_rank)
-    torch.cuda.set_device(args.local_rank)
+    # assigned_device = "cuda:{}".format(args.local_rank)
+    # torch.cuda.set_device(args.local_rank)
     global_rank = args.node_rank * 4 + args.local_rank
 
     start_time_backward = torch.cuda.Event(enable_timing=True)
     stop_time_backward = torch.cuda.Event(enable_timing=True)
     for i in range(100):
         print(i)
-        tensor_rand = torch.rand(
-            array_size, device=assigned_device, dtype=torch.float32
-        )
+        send_tensor = torch.rand(array_size, device=src_device, dtype=torch.float32)
+        recv_tensor = torch.rand(array_size, device=dest_device, dtype=torch.float32)
         start_time_backward.record()
-        if args.local_rank == src_device:
+        if args.local_rank == 0:
             torch.send(tensor_rand, dest_device)
-        if args.local_rank == dest_device:
+        if args.local_rank == 1:
             torch.recv(tensor_rand, src=src_device)
         stop_time_backward.record()
         torch.cuda.synchronize()
