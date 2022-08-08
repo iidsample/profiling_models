@@ -15,6 +15,8 @@ import torch.distributed as dist
 from torchvision import datasets, transforms
 from collections import defaultdict
 
+import datetime
+
 
 def parse_args(parser):
     # parser.add_argument("--arch", default="resnet50", type=str,
@@ -118,7 +120,7 @@ if __name__ == "__main__":
     dist.init_process_group(
         backend="NCCL",
         init_method="tcp://172.31.45.37:2345",
-        timeout=60,
+        timeout=datetime.timedelta(60),
         world_size=2,
         rank=args.local_rank,
     )
