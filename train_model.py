@@ -71,7 +71,7 @@ def main_trainer(args, bsize):
             data_dict = dict()
             data_dict["args"] = args.__str__()
             data_dict["timing_log"] = time_list
-            file_name = "{}_out_file_{}_bsize_{}.json".format(
+            file_name = "{}_out_file_{}_bsize_{}_no_nvlink.json".format(
                 args.model_name, args.local_rank, bsize
             )
             with open(file_name, "w") as fout:
