@@ -87,35 +87,39 @@ if __name__ == "__main__":
     args = parse_args(argparse.ArgumentParser(description="Large Scale Verification"))
     dist.init_process_group(backend="NCCL", init_method="env://")
     print("Dist init")
-    args.model_name = "resnet50"
-    main_trainer(args, 16)
-    main_trainer(args, 32)
-    main_trainer(args, 48)
-    args.model_name = "vgg19"
-    main_trainer(args, 16)
-    main_trainer(args, 32)
-    main_trainer(args, 48)
-    args.model_name = "vgg16"
-    main_trainer(args, 16)
-    main_trainer(args, 32)
-    main_trainer(args, 48)
-    args.model_name = "vgg11"
-    main_trainer(args, 16)
-    main_trainer(args, 32)
-    main_trainer(args, 48)
-    args.model_name = "resnet152"
-    main_trainer(args, 16)
-    main_trainer(args, 32)
-    main_trainer(args, 48)
-    args.model_name = "resnet101"
-    main_trainer(args, 16)
-    main_trainer(args, 32)
-    main_trainer(args, 48)
-    args.model_name = "alexnet"
-    main_trainer(args, 16)
-    main_trainer(args, 32)
-    main_trainer(args, 48)
-    args.model_name = "shufflenet_v2_x1_0"
+    # args.model_name = "resnet50"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    # args.model_name = "vgg19"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    # args.model_name = "vgg16"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    # args.model_name = "vgg11"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    # args.model_name = "resnet152"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    # args.model_name = "resnet101"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    # args.model_name = "alexnet"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    # args.model_name = "shufflenet_v2_x1_0"
+    # main_trainer(args, 16)
+    # main_trainer(args, 32)
+    # main_trainer(args, 48)
+    args.model_name = "inception_v3"
     main_trainer(args, 16)
     main_trainer(args, 32)
     main_trainer(args, 48)
