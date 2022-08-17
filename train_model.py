@@ -60,7 +60,10 @@ def main_trainer(args, bsize):
     start_time = torch.cuda.Event(enable_timing=True)
     stop_time = torch.cuda.Event(enable_timing=True)
     time_list = list()
-    data = torch.randn((bsize, 3, 224, 224))
+    if args.model_name == "inception_v3":
+        data = torch.randn((bsize, 3, 299, 299))
+    else:
+        data = torch.randn((bsize, 3, 224, 224))
     target = torch.randint(0, 900, [bsize])
     for batch_idx in range(100):
         print(batch_idx)
