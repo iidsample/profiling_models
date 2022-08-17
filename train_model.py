@@ -119,7 +119,7 @@ if __name__ == "__main__":
     # main_trainer(args, 16)
     # main_trainer(args, 32)
     # main_trainer(args, 48)
-    args.model_name = "inception_v3"
+    args.model_name = "googlenet"
     main_trainer(args, 16)
     main_trainer(args, 32)
     main_trainer(args, 48)
