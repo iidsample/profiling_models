@@ -59,7 +59,7 @@ def main_trainer(args, bsize):
         print(batch_idx)
         data, target = data.to(assigned_device), target.to(assigned_device)
         output = model(data)
-        if args.model_name == "googlenet" and args.model_name == "inception_v3":
+        if args.model_name == "googlenet" or args.model_name == "inception_v3":
             import ipdb
 
             ipdb.set_trace()
