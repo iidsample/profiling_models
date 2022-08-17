@@ -47,7 +47,10 @@ def main_trainer(args, bsize):
     criterion = torch.nn.CrossEntropyLoss().to(assigned_device)
     optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=0.0001)
     model = torch.nn.parallel.DistributedDataParallel(
-        model, device_ids=[args.local_rank], output_device=args.local_rank
+        model,
+        device_ids=[args.local_rank],
+        output_device=args.local_rank,
+        find_unused_parameter=True,
     )
     model.train()
     start_time = torch.cuda.Event(enable_timing=True)
