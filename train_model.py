@@ -50,7 +50,7 @@ def main_trainer(args, bsize):
         model,
         device_ids=[args.local_rank],
         output_device=args.local_rank,
-        find_unused_parameter=True,
+        find_unused_parameters=True,
     )
     model.train()
     start_time = torch.cuda.Event(enable_timing=True)
