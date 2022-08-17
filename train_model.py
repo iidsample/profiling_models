@@ -59,6 +59,8 @@ def main_trainer(args, bsize):
         print(batch_idx)
         data, target = data.to(assigned_device), target.to(assigned_device)
         output = model(data)
+        if args.model_name == "googlenet" and args.model_name == "inception_v3":
+            output = output[0]
         loss = criterion(output, target)
         torch.cuda.synchronize()  # let's sync before starting
         start_time.record()
