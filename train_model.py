@@ -60,9 +60,6 @@ def main_trainer(args, bsize):
         data, target = data.to(assigned_device), target.to(assigned_device)
         output = model(data)
         if args.model_name == "googlenet" or args.model_name == "inception_v3":
-            import ipdb
-
-            ipdb.set_trace()
             output = output[0]
         loss = criterion(output, target)
         torch.cuda.synchronize()  # let's sync before starting
@@ -125,6 +122,10 @@ if __name__ == "__main__":
     # main_trainer(args, 32)
     # main_trainer(args, 48)
     args.model_name = "googlenet"
+    main_trainer(args, 16)
+    main_trainer(args, 32)
+    main_trainer(args, 48)
+    args.model_name = "inception_v3"
     main_trainer(args, 16)
     main_trainer(args, 32)
     main_trainer(args, 48)
