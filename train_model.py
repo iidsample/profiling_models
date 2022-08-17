@@ -45,9 +45,11 @@ def main_trainer(args, bsize):
     model = models.__dict__[args.model_name]()
     model.to(assigned_device)
     criterion = torch.nn.CrossEntropyLoss().to(assigned_device)
-    if args.model_name == "googlenet" or args.model_name == "inception_v3":
+    if args.model_name == "googlenet":
         criterion1 = torch.nn.CrossEntropyLoss().to(assigned_device)
         criterion2 = torch.nn.CrossEntropyLoss().to(assigned_device)
+    if args.model_name == "inception_v3":
+        criterion1 = torch.nn.CrossEntropyLoss().to(assigned_device)
     optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=0.0001)
     model = torch.nn.parallel.DistributedDataParallel(
         model,
@@ -70,6 +72,9 @@ def main_trainer(args, bsize):
                 + criterion1(output[1], target)
                 + criterion2(output[2], target)
             )
+        elif args.model_name == "inception_v3":
+            loss = criterion(output[0], target) + criterion1(output[1], target)
+
         else:
             loss = criterion(output, target)
         torch.cuda.synchronize()  # let's sync before starting
