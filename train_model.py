@@ -69,7 +69,7 @@ def main_trainer(args, bsize):
         print(batch_idx)
         data, target = data.to(assigned_device), target.to(assigned_device)
         output = model(data)
-        if args.model_name == "googlenet" or args.model_name == "inception_v3":
+        if args.model_name == "googlenet":
             loss = (
                 criterion(output[0], target)
                 + criterion1(output[1], target)
